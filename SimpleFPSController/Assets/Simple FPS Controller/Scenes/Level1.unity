@@ -1612,36 +1612,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 275553561}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &296219575
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 296219576}
-  m_Layer: 2
-  m_Name: Ground Checker
-  m_TagString: MainCamera
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &296219576
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 296219575}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.95, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 849128486}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &311268571
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4665,8 +4635,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 849128486}
-  - component: {fileID: 849128485}
-  - component: {fileID: 849128484}
   - component: {fileID: 849128483}
   - component: {fileID: 849128482}
   - component: {fileID: 849128481}
@@ -4706,7 +4674,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75227a8b9d199ef42992e9717f05828d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 12
+  speed: 12
   dampingVelocity: 0.37
   v: 0
   h: 0
@@ -4716,8 +4684,8 @@ MonoBehaviour:
   explosionVelocity: {x: 0, y: 0, z: 0}
   slidingMomentum: {x: 0, y: 0, z: 0}
   useGravity: 1
-  GroundChecker: {fileID: 296219576}
-  maxGroundDistance: 0.2
+  groundCheckOffset: {x: 0, y: -1.2, z: 0}
+  maxGroundDistance: 0.7
   isGrounded: 0
   jumpHeight: 15
   HyperDrive: {fileID: 239900891}
@@ -4735,60 +4703,13 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 2
+  m_Height: 3
   m_Radius: 0.5000001
   m_SlopeLimit: 15
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &849128484
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 849128479}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 73c176f402d2c2f4d929aa5da7585d17, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
---- !u!33 &849128485
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 849128479}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &849128486
 Transform:
   m_ObjectHideFlags: 0
@@ -4798,10 +4719,9 @@ Transform:
   m_GameObject: {fileID: 849128479}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.85, z: -8.62}
-  m_LocalScale: {x: 1, y: 1.4625, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1668928801}
-  - {fileID: 296219576}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

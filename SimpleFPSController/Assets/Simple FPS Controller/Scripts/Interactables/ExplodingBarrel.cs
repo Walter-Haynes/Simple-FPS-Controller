@@ -26,13 +26,13 @@ public class ExplodingBarrel : MonoBehaviour
         int __colliderCount = Physics.OverlapSphereNonAlloc(explosionPos, explosionRange, results: _colliders);
 
         GrapplingHook.pvm.explosionVelocity += Vector3.ClampMagnitude(
-            (PlayerMovement.cc.transform.position - explosionPos).normalized *
-            Mathf.Clamp(1.0f / GrapplingHook.DistanceSquared(explosionPos, PlayerMovement.cc.transform.position), 0, .5f) * 
+            (PlayerMovement.characterController.transform.position - explosionPos).normalized *
+            Mathf.Clamp(1.0f / GrapplingHook.DistanceSquared(explosionPos, PlayerMovement.characterController.transform.position), 0, .5f) * 
             explosionForce / 80.0f, 
             50);
         
-        //GrapplingHook.pvm.gravityVector += (PlayerMovement.cc.transform.position - explosionPos).normalized * Mathf.Clamp(1.0f / GrapplingHook.DistanceSquared(explosionPos, PlayerMovement.cc.transform.position), 0, .35f) * explosionForce / 80.0f;
-        //PlayerMovement.cc.Move((PlayerMovement.cc.transform.position - explosionPos).normalized * (1.0f / GrapplingHook.DistanceSquared(explosionPos, PlayerMovement.cc.transform.position)) * explosionForce / 50.0f);
+        //GrapplingHook.pvm.gravityVector += (PlayerMovement.characterController.transform.position - explosionPos).normalized * Mathf.Clamp(1.0f / GrapplingHook.DistanceSquared(explosionPos, PlayerMovement.characterController.transform.position), 0, .35f) * explosionForce / 80.0f;
+        //PlayerMovement.characterController.Move((PlayerMovement.characterController.transform.position - explosionPos).normalized * (1.0f / GrapplingHook.DistanceSquared(explosionPos, PlayerMovement.characterController.transform.position)) * explosionForce / 50.0f);
 
         for(int __index = 0; __index < __colliderCount; __index++)
         {
