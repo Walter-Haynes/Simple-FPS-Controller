@@ -78,7 +78,7 @@ public class PlayerMovement : MonoBehaviour
                 isGrounded = false;
 
                 if (useGravity)
-                    gravityVector += Physics.gravity * Time.deltaTime * TimeManager.currentTimeScale;
+                    gravityVector += Physics.gravity * Time.deltaTime * EffectsManager.currentTimeScale;
             }
 
             if (Physics.Raycast(GroundChecker.position, Vector3.down, out hitInfo))
@@ -89,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
                     slopeAngle = Vector3.Angle(transform.up, hitInfo.normal);
                     if (slopeAngle > cc.slopeLimit)
                     {
-                        slidingTime += Time.deltaTime * TimeManager.currentTimeScale;
+                        slidingTime += Time.deltaTime * EffectsManager.currentTimeScale;
                         slidingMomentum += (hitInfo.normal - transform.up) * Mathf.Clamp01(slidingTime * 1.1f) * slopeAngle * 2;
                         inputVelocity *= .1f;
 
@@ -101,17 +101,17 @@ public class PlayerMovement : MonoBehaviour
             if (slidingMomentum != zeroVector)
             {
                 slidingTime = 0.0f;
-                slidingMomentum -= slidingMomentum.normalized  * 20 * Time.deltaTime * TimeManager.currentTimeScale;
+                slidingMomentum -= slidingMomentum.normalized  * 20 * Time.deltaTime * EffectsManager.currentTimeScale;
                 if (slidingMomentum.sqrMagnitude < 0.02f)
                     slidingMomentum = zeroVector;
             }
         }
         
-        t += Time.deltaTime * TimeManager.currentTimeScale;
+        t += Time.deltaTime * EffectsManager.currentTimeScale;
         if (t > .1f)
         {
             dSqr = GrapplingHook.DistanceSquared(lastFramePosition, transform.position);
-            if (dSqr > 10 * TimeManager.currentTimeScale)
+            if (dSqr > 10 * EffectsManager.currentTimeScale)
             {
                 if (!HyperDrive.isPlaying)
                     HyperDrive.Play();
@@ -132,7 +132,7 @@ public class PlayerMovement : MonoBehaviour
             lastFramePosition = transform.position;
         }
         
-        cc.Move((velocity + inputVelocity + gravityVector + slidingMomentum + explosionVelocity) * Time.deltaTime * TimeManager.currentTimeScale);
+        cc.Move((velocity + inputVelocity + gravityVector + slidingMomentum + explosionVelocity) * Time.deltaTime * EffectsManager.currentTimeScale);
         velocity = zeroVector;
 
         if(explosionVelocity != zeroVector)
@@ -142,7 +142,7 @@ public class PlayerMovement : MonoBehaviour
                 explosionVelocity = zeroVector;
         }
 
-        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, FOVAim, Time.deltaTime * TimeManager.currentTimeScale * 8);
+        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, FOVAim, Time.deltaTime * EffectsManager.currentTimeScale * 8);
     }
     
     private Vector3 lastFramePosition;

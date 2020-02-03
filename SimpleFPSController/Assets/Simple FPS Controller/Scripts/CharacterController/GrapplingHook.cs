@@ -75,7 +75,7 @@ public class GrapplingHook : MonoBehaviour
         _decreaseMagnitude:
         if (momentum.sqrMagnitude >= 0.0f)
         {
-            momentum -= momentum * dampSpeed * Time.deltaTime * TimeManager.currentTimeScale;
+            momentum -= momentum * dampSpeed * Time.deltaTime * EffectsManager.currentTimeScale;
             if (momentum.sqrMagnitude < 0.0f)
                 momentum = zeroVector;
             pvm.velocity += momentum;

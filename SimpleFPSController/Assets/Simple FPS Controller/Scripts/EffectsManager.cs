@@ -2,7 +2,7 @@
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-public class TimeManager : MonoBehaviour
+public class EffectsManager : MonoBehaviour
 {
     #region Variables
 

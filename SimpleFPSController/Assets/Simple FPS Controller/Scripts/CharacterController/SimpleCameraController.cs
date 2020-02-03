@@ -4,6 +4,8 @@ namespace UnityTemplateProjects
 {
     public class SimpleCameraController : MonoBehaviour
     {
+        #region Variables
+        
         private class CameraState
         {
             public float yaw;
@@ -69,6 +71,10 @@ namespace UnityTemplateProjects
 
         [Tooltip("Whether or not to invert our Y axis for mouse input to rotation.")]
         public bool invertY = false;
+        
+        #endregion
+
+        #region Methods
 
         private void OnEnable()
         {
@@ -164,6 +170,8 @@ namespace UnityTemplateProjects
 
             m_InterpolatingCameraState.UpdateTransform(transform);
         }
+        
+        #endregion
     }
 
 }

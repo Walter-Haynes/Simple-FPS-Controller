@@ -2,6 +2,8 @@
 
 public class Ammo : MonoBehaviour
 {
+    #region Variables
+    
     public static Weapons _weapons_;
     public uint ammo = 30;
     public bool isInside = false;
@@ -32,9 +34,14 @@ public class Ammo : MonoBehaviour
     }
 
     private float timer = 0.0f;
+    
+    #endregion
+
+    #region Methods
+
     private void Update()
     {
-        timer += Time.deltaTime * TimeManager.currentTimeScale;
+        timer += Time.deltaTime * EffectsManager.currentTimeScale;
         if (timer > 3.14f)
             timer -= 6.28f;
 
@@ -49,4 +56,6 @@ public class Ammo : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+    
+    #endregion
 }
