@@ -29,11 +29,6 @@ public class GrapplingHook : MonoBehaviour
         WallRun.gHook = this;
     }
 
-    public static float DistanceSquared(in Vector3 P1, in Vector3 P2)
-    {
-        return (P1.x - P2.x) * (P1.x - P2.x) + (P1.y - P2.y) * (P1.y - P2.y) + (P1.z - P2.z) * (P1.z - P2.z);
-    }
-
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
@@ -57,7 +52,7 @@ public class GrapplingHook : MonoBehaviour
             {
                 Vector3 __playerPosition = transform.position;
                 
-                distance = DistanceSquared(grapplingLocation, __playerPosition);
+                distance = grapplingLocation.DistanceSquared(__playerPosition);
 
                 dir = (grapplingLocation - __playerPosition).normalized;
                 momentum = dir * (hookSpeed * Mathf.Clamp01(distance));

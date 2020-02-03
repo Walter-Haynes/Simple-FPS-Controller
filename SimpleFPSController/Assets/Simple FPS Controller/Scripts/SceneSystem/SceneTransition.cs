@@ -19,7 +19,7 @@ public class SceneTransition : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, aimedPosition, Time.deltaTime * 3);
         if (changeScenes)
         {
-            if (GrapplingHook.DistanceSquared(transform.position, aimedPosition) < .01f)
+            if (transform.position.DistanceSquared(aimedPosition) < .01f)
             {
                 SceneManager.LoadScene(nextScene, LoadSceneMode.Single);
                 changeScenes = false;
