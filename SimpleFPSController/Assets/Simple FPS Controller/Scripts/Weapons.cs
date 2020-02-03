@@ -33,8 +33,8 @@ public class Weapons : MonoBehaviour
 
     private void Start()
     {
-        for (byte i = 0; i < weapons.Length; ++i)
-            weapons[i].WeaponObj.active = false;
+        for(byte i = 0; i < weapons.Length; ++i)
+            weapons[i].WeaponObj.SetActive(false);
 
         ChangeWeapon(0);
         weapons[weaponIndex].AmmoUI.text = weapons[weaponIndex].leftAmmoInFiller + "/" + weapons[weaponIndex].ammo;
@@ -147,9 +147,9 @@ public class Weapons : MonoBehaviour
     {
         if(_weaponIndex_ < weapons.Length)
         {
-            weapons[_weaponIndex_].WeaponObj.active = false;
+            weapons[_weaponIndex_].WeaponObj.SetActive(false);
             weaponIndex = _weaponIndex_;
-            weapons[_weaponIndex_].WeaponObj.active = true;
+            weapons[_weaponIndex_].WeaponObj.SetActive(true);
 
             fillerRb = weapons[weaponIndex].WeaponFiller.GetComponent<Rigidbody>();
             weapons[weaponIndex].AmmoUI.text = weapons[weaponIndex].leftAmmoInFiller + "/" + weapons[weaponIndex].ammo;
