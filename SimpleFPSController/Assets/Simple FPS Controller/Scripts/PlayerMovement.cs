@@ -39,7 +39,7 @@ public class PlayerMovement : MonoBehaviour
 
     #region Methods
 
-    void Start()
+    private void Start()
     {
         cc = this.GetComponent<CharacterController>();
 
@@ -54,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
         FOVAim = DefaultFOV;
     }
 
-    void Update()
+    private void Update()
     {
         v = Input.GetAxis("Vertical");
         h = Input.GetAxis("Horizontal");

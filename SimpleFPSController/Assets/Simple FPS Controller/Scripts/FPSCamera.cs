@@ -20,12 +20,12 @@ public class FPSCamera : MonoBehaviour
     
     #region Methods
 
-    void Awake()
+    private void Awake()
     {
         Application.targetFrameRate = 90;
     }
 
-    void Start()
+    private void Start()
     {
         if (lockCursor)
         {

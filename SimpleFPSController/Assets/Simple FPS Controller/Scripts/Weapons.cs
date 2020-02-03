@@ -31,7 +31,7 @@ public class Weapons : MonoBehaviour
         ExplosionFX = Explosion;
     }
 
-    void Start()
+    private void Start()
     {
         for (byte i = 0; i < weapons.Length; ++i)
             weapons[i].WeaponObj.active = false;
@@ -43,7 +43,8 @@ public class Weapons : MonoBehaviour
     }
 
     private uint DifferenceInAmmo;
-    void Update()
+
+    private void Update()
     {
         if (!reloading)
         {
