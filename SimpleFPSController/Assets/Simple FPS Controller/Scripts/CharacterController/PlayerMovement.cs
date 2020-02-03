@@ -78,7 +78,7 @@ public class PlayerMovement : MonoBehaviour
                 isGrounded = false;
 
                 if (useGravity)
-                    gravityVector += Physics.gravity * Time.deltaTime * EffectsManager.currentTimeScale;
+                    gravityVector += Physics.gravity * (Time.deltaTime * EffectsManager.currentTimeScale);
             }
 
             if (Physics.Raycast(GroundChecker.position, Vector3.down, out hitInfo))
@@ -98,12 +98,12 @@ public class PlayerMovement : MonoBehaviour
                     }
                 }
             }
-            if (slidingMomentum != zeroVector)
+            if (slidingMomentum != Vector3.zero)
             {
                 slidingTime = 0.0f;
-                slidingMomentum -= slidingMomentum.normalized  * 20 * Time.deltaTime * EffectsManager.currentTimeScale;
+                slidingMomentum -= slidingMomentum.normalized * (20 * Time.deltaTime * EffectsManager.currentTimeScale);
                 if (slidingMomentum.sqrMagnitude < 0.02f)
-                    slidingMomentum = zeroVector;
+                    slidingMomentum = Vector3.zero;
             }
         }
         
@@ -132,14 +132,14 @@ public class PlayerMovement : MonoBehaviour
             lastFramePosition = transform.position;
         }
         
-        cc.Move((velocity + inputVelocity + gravityVector + slidingMomentum + explosionVelocity) * Time.deltaTime * EffectsManager.currentTimeScale);
-        velocity = zeroVector;
+        cc.Move((velocity + inputVelocity + gravityVector + slidingMomentum + explosionVelocity) * (Time.deltaTime * EffectsManager.currentTimeScale));
+        velocity = Vector3.zero;
 
-        if(explosionVelocity != zeroVector)
+        if(explosionVelocity != Vector3.zero)
         {
-            explosionVelocity -= explosionVelocity.normalized * 10 * Time.deltaTime;
+            explosionVelocity -= explosionVelocity.normalized * (10 * Time.deltaTime);
             if (explosionVelocity.sqrMagnitude <= .001f)
-                explosionVelocity = zeroVector;
+                explosionVelocity = Vector3.zero;
         }
 
         cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, FOVAim, Time.deltaTime * EffectsManager.currentTimeScale * 8);
@@ -147,20 +147,20 @@ public class PlayerMovement : MonoBehaviour
     
     private Vector3 lastFramePosition;
     private float t = 0.0f, dSqr;
-    
-    private Vector3 zeroVector = Vector3.zero;
+
     public void EnableMovement()
     {
-        enableMovement = true;
-        gravityVector = inputVelocity = slidingMomentum = explosionVelocity = zeroVector;
+        ToggleMovement(enabledState: true);
     }
-    
     public void DisableMovement()
     {
-        enableMovement = false;
-        gravityVector = inputVelocity = slidingMomentum = explosionVelocity = zeroVector;
+        ToggleMovement(enabledState: false);
     }
-    
-    
+    public void ToggleMovement(in bool enabledState)
+    {
+        enableMovement = enabledState;
+        gravityVector = inputVelocity = slidingMomentum = explosionVelocity = Vector3.zero;
+    }
+
     #endregion
 }

@@ -37,6 +37,7 @@ public class FPSCamera : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
+        
         WallRun.fpsCam = WeaponSway.fpsCam = this;
         PlayerMovement.cam = this.GetComponent<Camera>();
         EffectsManager.postProcessing = this.GetComponent<UnityEngine.Rendering.Volume>();
