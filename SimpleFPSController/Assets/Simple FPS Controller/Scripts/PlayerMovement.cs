@@ -1,10 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
+    #region Variables
+    
     public static CharacterController cc;
     public static Camera cam;
 
@@ -34,6 +34,10 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector]
     public float FOVAim = 0.0f, DefaultFOV;
     public float maxFOV = 140;
+    
+    #endregion
+
+    #region Methods
 
     void Start()
     {
@@ -140,6 +144,7 @@ public class PlayerMovement : MonoBehaviour
 
         cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, FOVAim, Time.deltaTime * TimeManager.currentTimeScale * 8);
     }
+    
     private Vector3 lastFramePosition;
     private float t = 0.0f, dSqr;
     
@@ -155,4 +160,7 @@ public class PlayerMovement : MonoBehaviour
         enableMovement = false;
         gravityVector = inputVelocity = slidingMomentum = explosionVelocity = zeroVector;
     }
+    
+    
+    #endregion
 }

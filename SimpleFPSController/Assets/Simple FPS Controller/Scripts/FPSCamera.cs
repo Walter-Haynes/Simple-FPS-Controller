@@ -1,10 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
 public class FPSCamera : MonoBehaviour
 {
+    #region Variables
+
     public bool lockCursor = false;
 
     public float Sensitivity = 50;
@@ -14,6 +15,10 @@ public class FPSCamera : MonoBehaviour
 
     public Transform Player;
     public Transform CameraPosition;
+    
+    #endregion
+    
+    #region Methods
 
     void Awake()
     {
@@ -58,4 +63,6 @@ public class FPSCamera : MonoBehaviour
 
         transform.position = CameraPosition.position;
     }
+    
+    #endregion
 }

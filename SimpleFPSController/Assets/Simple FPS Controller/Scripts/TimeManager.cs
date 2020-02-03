@@ -1,11 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
 public class TimeManager : MonoBehaviour
 {
+    #region Variables
+
     public static Volume postProcessing;
 
     public static MotionBlur mBlur;
@@ -21,6 +21,10 @@ public class TimeManager : MonoBehaviour
     public AudioSource background;
     public AudioSource shot;
     public AudioSource noAmmo;
+    
+    #endregion
+
+    #region Methods
 
     public static void SetupPostProcessing()
     {
@@ -69,4 +73,6 @@ public class TimeManager : MonoBehaviour
             Time.timeScale = currentTimeScale;
         }
     }
+    
+    #endregion
 }

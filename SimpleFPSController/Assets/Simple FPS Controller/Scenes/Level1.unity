@@ -99,7 +99,7 @@ LightmapSettings:
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000000, guid: 2137309dc36a5b74c83f20ef786709d1,
     type: 2}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -946,6 +946,41 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 689636649}
     m_Modifications:
+    - target: {fileID: 6439167445494666354, guid: 9c431282458eb864ba45319a7998bc7a,
+        type: 3}
+      propertyPath: m_Name
+      value: Hyperdrive
+      objectReference: {fileID: 0}
+    - target: {fileID: 6439167445494666354, guid: 9c431282458eb864ba45319a7998bc7a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6439167445494666355, guid: 9c431282458eb864ba45319a7998bc7a,
+        type: 3}
+      propertyPath: m_VertexStreams.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6439167445494666355, guid: 9c431282458eb864ba45319a7998bc7a,
+        type: 3}
+      propertyPath: m_LengthScale
+      value: 10.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 6439167445494666355, guid: 9c431282458eb864ba45319a7998bc7a,
+        type: 3}
+      propertyPath: m_UseCustomVertexStreams
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6439167445494666355, guid: 9c431282458eb864ba45319a7998bc7a,
+        type: 3}
+      propertyPath: m_VertexStreams.Array.data[1]
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6439167445494666355, guid: 9c431282458eb864ba45319a7998bc7a,
+        type: 3}
+      propertyPath: m_VertexStreams.Array.data[2]
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 6439167445494666364, guid: 9c431282458eb864ba45319a7998bc7a,
         type: 3}
       propertyPath: playOnAwake
@@ -1025,41 +1060,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6439167445494666354, guid: 9c431282458eb864ba45319a7998bc7a,
-        type: 3}
-      propertyPath: m_Name
-      value: Hyperdrive
-      objectReference: {fileID: 0}
-    - target: {fileID: 6439167445494666354, guid: 9c431282458eb864ba45319a7998bc7a,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6439167445494666355, guid: 9c431282458eb864ba45319a7998bc7a,
-        type: 3}
-      propertyPath: m_VertexStreams.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6439167445494666355, guid: 9c431282458eb864ba45319a7998bc7a,
-        type: 3}
-      propertyPath: m_LengthScale
-      value: 10.36
-      objectReference: {fileID: 0}
-    - target: {fileID: 6439167445494666355, guid: 9c431282458eb864ba45319a7998bc7a,
-        type: 3}
-      propertyPath: m_UseCustomVertexStreams
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6439167445494666355, guid: 9c431282458eb864ba45319a7998bc7a,
-        type: 3}
-      propertyPath: m_VertexStreams.Array.data[1]
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6439167445494666355, guid: 9c431282458eb864ba45319a7998bc7a,
-        type: 3}
-      propertyPath: m_VertexStreams.Array.data[2]
-      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c431282458eb864ba45319a7998bc7a, type: 3}
@@ -3110,16 +3110,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 55.099834
       objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 0719faece8562be44969c360786c368e,
-        type: 3}
-      propertyPath: m_Name
-      value: Diamond
-      objectReference: {fileID: 0}
     - target: {fileID: -1504981713932161579, guid: 0719faece8562be44969c360786c368e,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: ae34b87ea61560f40b995a26725bd9bb, type: 2}
+    - target: {fileID: -927199367670048503, guid: 0719faece8562be44969c360786c368e,
+        type: 3}
+      propertyPath: m_Name
+      value: Diamond
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0719faece8562be44969c360786c368e, type: 3}
 --- !u!1001 &664219440
@@ -3451,8 +3451,10 @@ MonoBehaviour:
   m_RenderShadows: 1
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
-  m_RendererOverrideOption: 1
-  m_RendererData: {fileID: 0}
+  m_CameraType: 0
+  m_CameraOutput: 0
+  m_Cameras: []
+  m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 1

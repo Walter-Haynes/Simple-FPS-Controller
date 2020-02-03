@@ -1,10 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Weapons : MonoBehaviour
 {
+    #region Variables
+
     public static byte weaponIndex = 0;
     public Weapon[] weapons;
     
@@ -20,6 +21,10 @@ public class Weapons : MonoBehaviour
     [Header("Effects")]
     public GameObject Explosion;
     public static GameObject ExplosionFX;
+    
+    #endregion
+
+    #region Methods
 
     private void Awake()
     {
@@ -155,9 +160,11 @@ public class Weapons : MonoBehaviour
         weapons[weaponIndex].ammo += newAmmo;
         weapons[weaponIndex].AmmoUI.text = weapons[weaponIndex].leftAmmoInFiller + "/" + weapons[weaponIndex].ammo;
     }
+    
+    #endregion
 }
 
-[System.Serializable]
+[Serializable]
 public class Weapon
 {
     [Header("Objects")]

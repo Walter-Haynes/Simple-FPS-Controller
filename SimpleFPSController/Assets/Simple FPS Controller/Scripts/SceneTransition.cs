@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneTransition : MonoBehaviour
 {
     public Transform hidden, shown;
     private Vector3 aimedPosition;
+    
     private void Start()
     {
         aimedPosition = hidden.position;
@@ -36,6 +35,7 @@ public class SceneTransition : MonoBehaviour
 
     private int nextScene;
     private bool changeScenes = false;
+    
     public void ShowTransition(int nextScene_)
     {
         aimedPosition = shown.position;
