@@ -1,10 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Weapons : MonoBehaviour
 {
+    #region Variables
+
     public static byte weaponIndex = 0;
     public Weapon[] weapons;
     
@@ -20,16 +21,20 @@ public class Weapons : MonoBehaviour
     [Header("Effects")]
     public GameObject Explosion;
     public static GameObject ExplosionFX;
+    
+    #endregion
+
+    #region Methods
 
     private void Awake()
     {
         ExplosionFX = Explosion;
     }
 
-    void Start()
+    private void Start()
     {
-        for (byte i = 0; i < weapons.Length; ++i)
-            weapons[i].WeaponObj.active = false;
+        for(byte i = 0; i < weapons.Length; ++i)
+            weapons[i].WeaponObj.SetActive(false);
 
         ChangeWeapon(0);
         weapons[weaponIndex].AmmoUI.text = weapons[weaponIndex].leftAmmoInFiller + "/" + weapons[weaponIndex].ammo;
@@ -38,7 +43,8 @@ public class Weapons : MonoBehaviour
     }
 
     private uint DifferenceInAmmo;
-    void Update()
+
+    private void Update()
     {
         if (!reloading)
         {
@@ -141,9 +147,9 @@ public class Weapons : MonoBehaviour
     {
         if(_weaponIndex_ < weapons.Length)
         {
-            weapons[_weaponIndex_].WeaponObj.active = false;
+            weapons[_weaponIndex_].WeaponObj.SetActive(false);
             weaponIndex = _weaponIndex_;
-            weapons[_weaponIndex_].WeaponObj.active = true;
+            weapons[_weaponIndex_].WeaponObj.SetActive(true);
 
             fillerRb = weapons[weaponIndex].WeaponFiller.GetComponent<Rigidbody>();
             weapons[weaponIndex].AmmoUI.text = weapons[weaponIndex].leftAmmoInFiller + "/" + weapons[weaponIndex].ammo;
@@ -155,9 +161,11 @@ public class Weapons : MonoBehaviour
         weapons[weaponIndex].ammo += newAmmo;
         weapons[weaponIndex].AmmoUI.text = weapons[weaponIndex].leftAmmoInFiller + "/" + weapons[weaponIndex].ammo;
     }
+    
+    #endregion
 }
 
-[System.Serializable]
+[Serializable]
 public class Weapon
 {
     [Header("Objects")]

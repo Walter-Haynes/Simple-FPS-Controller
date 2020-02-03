@@ -1,10 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(FPSCamera))]
 public class GrapplingHook : MonoBehaviour
 {
+    #region Variables
+
     private Vector3 grapplingLocation;
     private readonly Vector3 zeroVector = Vector3.zero;
     private RaycastHit hitInfo;
@@ -19,17 +19,22 @@ public class GrapplingHook : MonoBehaviour
 
     public static WallRun wr;
     public LineRenderer lr;
+    
+    #endregion
+
+    #region Methods
 
     private void Start()
     {
         WallRun.gHook = this;
     }
 
-    public static float DistanceSquared(Vector3 P1, Vector3 P2){
+    public static float DistanceSquared(Vector3 P1, Vector3 P2)
+    {
         return (P1.x - P2.x) * (P1.x - P2.x) + (P1.y - P2.y) * (P1.y - P2.y) + (P1.z - P2.z) * (P1.z - P2.z);
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -85,4 +90,6 @@ public class GrapplingHook : MonoBehaviour
         lr.SetPosition(0, zeroVector);
         lr.SetPosition(1, zeroVector);
     }
+    
+    #endregion
 }

@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class WeaponSway : MonoBehaviour
 {
+    #region Variables
+
     public static FPSCamera fpsCam;
 
     private Vector3 AimedPosition, InitialPosition;
@@ -12,6 +12,10 @@ public class WeaponSway : MonoBehaviour
 
     public float SmoothAmount = 3.0f, CameraSmoothAmount = 10;
     private float movementX, movementY;
+
+    #endregion
+
+    #region Methods
 
     private void Start()
     {
@@ -44,4 +48,6 @@ public class WeaponSway : MonoBehaviour
         AimedPosition = transform.localPosition + Vector3.back * .07f;
         RecoilTimer = .05f;
     }
+    
+    #endregion
 }
