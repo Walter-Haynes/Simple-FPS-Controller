@@ -1,10 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(PlayerMovement))] // this also requires Character Controller
 public class WallRun : MonoBehaviour
 {
+    #region Variables
+
     public static FPSCamera fpsCam;
     public static GrapplingHook gHook;
     
@@ -23,6 +23,10 @@ public class WallRun : MonoBehaviour
     public float dampingVelocity = 4f;
     public float heightForce = 8f;
     public float sideForce = 5f;
+    
+    #endregion
+
+    #region Methods
 
     private void Start()
     {
@@ -149,4 +153,7 @@ public class WallRun : MonoBehaviour
         inputVelocity = transform.forward * runningSpeed - Vector3.up * 4;
     }
     private Vector3 inputVelocity;
+    
+    
+    #endregion
 }
