@@ -52,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
         jumpForce = Mathf.Sqrt(-Physics.gravity.y * jumpHeight);
     }
 
-    public void SetupFOV(float DefFOV)
+    public void SetupFOV(in float DefFOV)
     {
         DefaultFOV = DefFOV;
         FOVAim = DefaultFOV;
@@ -121,8 +121,8 @@ public class PlayerMovement : MonoBehaviour
         t += Time.deltaTime * EffectsManager.currentTimeScale;
         if (t > .1f)
         {
-            dSqr = GrapplingHook.DistanceSquared(lastFramePosition, transform.position);
-            if (dSqr > 10 * EffectsManager.currentTimeScale)
+            __distanceSquared = lastFramePosition.DistanceSquared(transform.position);
+            if (__distanceSquared > 10 * EffectsManager.currentTimeScale)
             {
                 if (!HyperDrive.isPlaying)
                     HyperDrive.Play();
@@ -134,8 +134,8 @@ public class PlayerMovement : MonoBehaviour
                     HyperDrive.Stop();
             }
 
-            FOVAim = dSqr > 30 
-                ? Mathf.Clamp(value: (90 + dSqr / 8), min: DefaultFOV, max: maxFOV) 
+            FOVAim = __distanceSquared > 30 
+                ? Mathf.Clamp(value: (90 + __distanceSquared / 8), min: DefaultFOV, max: maxFOV) 
                 : DefaultFOV;
 
             t = 0.0f;
@@ -156,7 +156,7 @@ public class PlayerMovement : MonoBehaviour
     }
     
     private Vector3 lastFramePosition;
-    private float t = 0.0f, dSqr;
+    private float t = 0.0f, __distanceSquared;
 
     public void EnableMovement()
     {

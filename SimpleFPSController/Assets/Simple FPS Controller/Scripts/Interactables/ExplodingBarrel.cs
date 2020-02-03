@@ -27,7 +27,7 @@ public class ExplodingBarrel : MonoBehaviour
 
         GrapplingHook.pvm.explosionVelocity += Vector3.ClampMagnitude(
             (PlayerMovement.characterController.transform.position - explosionPos).normalized *
-            Mathf.Clamp(1.0f / GrapplingHook.DistanceSquared(explosionPos, PlayerMovement.characterController.transform.position), 0, .5f) * 
+            Mathf.Clamp(value: 1.0f / explosionPos.DistanceSquared(PlayerMovement.characterController.transform.position), 0, .5f) * 
             explosionForce / 80.0f, 
             50);
         
@@ -36,6 +36,8 @@ public class ExplodingBarrel : MonoBehaviour
 
         for(int __index = 0; __index < __colliderCount; __index++)
         {
+            Debug.DrawLine(transform.position, _colliders[__index].transform.position, Color.red);
+
             if(_colliders[__index].TryGetComponent(out Rigidbody __rigidbody))
             {
                 __rigidbody.AddExplosionForce(explosionForce, transform.position, explosionRange);
