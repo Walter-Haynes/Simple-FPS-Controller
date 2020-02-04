@@ -137,13 +137,13 @@ public class WallRun : MonoBehaviour
         {
             if (directionToCheckForWall)
             {
-                //PlayerMovement.cc.Move((-transform.right * runningSpeed + transform.forward * runningSpeed) * runningSpeed * Time.deltaTime);
+                //PlayerMovement.characterController.Move((-transform.right * runningSpeed + transform.forward * runningSpeed) * runningSpeed * Time.deltaTime);
                 velocity = -transform.right * sideForce + transform.forward * sideForce * .5f + Vector3.up * heightForce;
                 EndWallRun();
             }
             else
             {
-                //PlayerMovement.cc.Move((transform.right * runningSpeed + transform.forward * runningSpeed) * runningSpeed * Time.deltaTime);
+                //PlayerMovement.characterController.Move((transform.right * runningSpeed + transform.forward * runningSpeed) * runningSpeed * Time.deltaTime);
                 velocity = transform.right * sideForce + transform.forward * sideForce * .5f + Vector3.up * heightForce;
                 EndWallRun();
             }

@@ -29,11 +29,6 @@ public class GrapplingHook : MonoBehaviour
         WallRun.gHook = this;
     }
 
-    public static float DistanceSquared(Vector3 P1, Vector3 P2)
-    {
-        return (P1.x - P2.x) * (P1.x - P2.x) + (P1.y - P2.y) * (P1.y - P2.y) + (P1.z - P2.z) * (P1.z - P2.z);
-    }
-
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
@@ -44,38 +39,43 @@ public class GrapplingHook : MonoBehaviour
                 pvm.DisableMovement();
                 momentum = zeroVector;
                 wr.EndWallRun();
-                goto _decreaseMagnitude;
+                
+                __DecreaseMagnitude();
             }
-            goto _decreaseMagnitude;
+            
+            __DecreaseMagnitude();
         }
 
         if (Input.GetKey(KeyCode.E))
         {
             if (grapplingLocation != zeroVector)
             {
-                distance = DistanceSquared(grapplingLocation, transform.position);
+                Vector3 __playerPosition = transform.position;
+                
+                distance = grapplingLocation.DistanceSquared(__playerPosition);
 
-                dir = (grapplingLocation - transform.position).normalized;
-                momentum = dir * hookSpeed * Mathf.Clamp01(distance);
-                lr.SetPosition(0, transform.position - Vector3.up);
+                dir = (grapplingLocation - __playerPosition).normalized;
+                momentum = dir * (hookSpeed * Mathf.Clamp01(distance));
+                lr.SetPosition(0, __playerPosition - Vector3.up);
                 lr.SetPosition(1, grapplingLocation);
 
-                goto _decreaseMagnitude;
+                __DecreaseMagnitude();
             }
             //return;
         }
 
         if (Input.GetKeyUp(KeyCode.E))
         {
-            if(grapplingLocation != zeroVector)
-                Unhook();
-            goto _decreaseMagnitude;
+            if(grapplingLocation != zeroVector) Unhook();
+            
+            __DecreaseMagnitude();
         }
 
-        _decreaseMagnitude:
-        if (momentum.sqrMagnitude >= 0.0f)
+        void __DecreaseMagnitude()
         {
-            momentum -= momentum * dampSpeed * Time.deltaTime * TimeManager.currentTimeScale;
+            if(!(momentum.sqrMagnitude >= 0.0f)) return;
+            
+            momentum -= momentum * (dampSpeed * Time.deltaTime * EffectsManager.currentTimeScale);
             if (momentum.sqrMagnitude < 0.0f)
                 momentum = zeroVector;
             pvm.velocity += momentum;
@@ -86,7 +86,9 @@ public class GrapplingHook : MonoBehaviour
     public void Unhook()
     {
         grapplingLocation = zeroVector;
+        
         pvm.EnableMovement();
+        
         lr.SetPosition(0, zeroVector);
         lr.SetPosition(1, zeroVector);
     }

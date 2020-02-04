@@ -37,10 +37,11 @@ public class FPSCamera : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
+        
         WallRun.fpsCam = WeaponSway.fpsCam = this;
         PlayerMovement.cam = this.GetComponent<Camera>();
-        TimeManager.postProcessing = this.GetComponent<UnityEngine.Rendering.Volume>();
-        TimeManager.SetupPostProcessing();
+        EffectsManager.postProcessing = this.GetComponent<UnityEngine.Rendering.Volume>();
+        EffectsManager.SetupPostProcessing();
 
         Player.GetComponent<PlayerMovement>().SetupFOV(PlayerMovement.cam.fieldOfView);
     }
@@ -48,8 +49,8 @@ public class FPSCamera : MonoBehaviour
     private void Update()
     {
         // Input from the mouse
-        mouseX = Input.GetAxis("Mouse X") * Sensitivity * TimeManager.currentTimeScale;
-        mouseY = Input.GetAxis("Mouse Y") * Sensitivity * TimeManager.currentTimeScale;
+        mouseX = Input.GetAxis("Mouse X") * Sensitivity * EffectsManager.currentTimeScale;
+        mouseY = Input.GetAxis("Mouse Y") * Sensitivity * EffectsManager.currentTimeScale;
         
         // Calculating the rotation
         rotationX -= mouseY;
