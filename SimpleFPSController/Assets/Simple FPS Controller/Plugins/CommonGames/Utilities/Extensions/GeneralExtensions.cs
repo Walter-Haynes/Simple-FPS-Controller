@@ -270,23 +270,22 @@ namespace CommonGames.Utilities.Extensions
             => obj ? obj : context.GetComponentInChildren<T>();
         
         [PublicAPI]
-        public static T TryGetIfNull<T>(this T obj, in GameObject context) where T : Component
-        {
-            context.TryGetComponent(out T __returnedObject);
-            return __returnedObject;
-        }
+        public static T TryGetIfNull<T>(this T obj, in GameObject context) where T : Component 
+            => (obj != null)? obj : context.TryGetComponent(out T __returnedObject) ? __returnedObject : null;
 
         [PublicAPI]
         public static T TryGetInChildrenIfNull<T>(this T obj, in GameObject context) where T : Component
-            => context.TryGetComponent(out T __returnedObject) ? __returnedObject : context.GetComponentInChildren<T>();
-        
+            => (obj != null)? obj : context.TryGetComponent(out T __returnedObject) ? __returnedObject : context.GetComponentInChildren<T>();
+
         [PublicAPI]
         public static T TryGetInParentIfNull<T>(this T obj, in GameObject context) where T : Component
-            => context.TryGetComponent(out T __returnedObject) ? __returnedObject : context.GetComponentInParent<T>();
-        
+            => (obj != null)? obj : context.TryGetComponent(out T __returnedObject) ? __returnedObject : context.GetComponentInParent<T>();
+
         [PublicAPI]
         public static T TryGetInParentOrChildrenIfNull<T>(this T obj, in GameObject context) where T : Component
         {
+            if(obj != null) return obj;
+
             if(context.TryGetComponent(out T __triedComponent)) return __triedComponent;
 
             T __componentInParent = context.GetComponentInParent<T>();
@@ -321,6 +320,48 @@ namespace CommonGames.Utilities.Extensions
         [PublicAPI]
         public static T TryGetInParentOrChildrenIfNull<T>(this T obj, in Component context) where T : Component
             => TryGetInParentOrChildrenIfNull(obj, context.gameObject);
+
+        #endregion
+        
+        #endregion
+        
+        #region GetComponent
+
+        #region GameObject Context
+
+        [PublicAPI]
+        public static T TryGetInChildren<T>(this GameObject context) where T : Component
+            => context.TryGetComponent(out T __returnedObject) ? __returnedObject : context.GetComponentInChildren<T>();
+        
+        [PublicAPI]
+        public static T TryGetInParent<T>(this GameObject context) where T : Component
+            => context.TryGetComponent(out T __returnedObject) ? __returnedObject : context.GetComponentInParent<T>();
+        
+        [PublicAPI]
+        public static T TryGetInParentOrChildren<T>(this GameObject context) where T : Component
+        {
+            if(context.TryGetComponent(out T __triedComponent)) return __triedComponent;
+
+            T __componentInParent = context.GetComponentInParent<T>();
+            
+            return __componentInParent ? __componentInParent : context.GetComponentInParent<T>();
+        }
+
+        #endregion
+
+        #region Component Context
+
+        [PublicAPI]
+        public static T TryGetInChildren<T>(this Component context) where T : Component
+            => TryGetInChildren<T>(context.gameObject);
+
+        [PublicAPI]
+        public static T TryGetInParent<T>(this Component context) where T : Component
+            => TryGetInParent<T>(context.gameObject);
+
+        [PublicAPI]
+        public static T TryGetInParentOrChildren<T>(this Component context) where T : Component
+            => TryGetInParentOrChildren<T>(context.gameObject);
 
         #endregion
 

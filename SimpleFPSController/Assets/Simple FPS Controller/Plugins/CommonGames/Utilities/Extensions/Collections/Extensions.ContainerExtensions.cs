@@ -48,6 +48,48 @@ namespace CommonGames.Utilities.Extensions
                     return t;
             return default;
         }
+        
+        /// <summary> Get the first entry that is of type T. </summary>
+        [PublicAPI]
+        public static T GetOfType<T, TypeOf>(this List<T> list) where T : class
+        {
+            foreach(T t in list)
+            {
+                if(t is TypeOf) return t;
+            }
+            return default;
+        }
+        
+        /*
+        [PublicAPI]
+        public static TypeOf GetOfType<T, TypeOf>(this List<T> list) where T : class
+        {
+            foreach(T t in list)
+            {
+                if(t is TypeOf)
+                { 
+                    return (t as TypeOf);   
+                }
+            }
+            return default;
+        }
+        */
+        
+        /*
+        /// <summary> Get the first entry that is of type T. </summary>
+        [PublicAPI]
+        public static T GetOfType<T>(this List<T> list, in Type type)
+        {
+            foreach(T t in list)
+            {
+                if(t is type))
+                { 
+                    return t;   
+                }
+            }
+            return default;
+        }
+        */
 
         /// <summary>
         /// Get index that returns true with with target function.

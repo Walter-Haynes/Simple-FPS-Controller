@@ -38,6 +38,8 @@ namespace CommonGames.Utilities
         //[ListDrawerSettings(ShowIndexLabels = true)]
         public static List<T> Instances = new List<T>();
         
+        public virtual int Index => IndexFromInstance(instance: this as T);
+        
         [PublicAPI]
         public static int IndexFromInstance(T instance) => Instances.IndexOf(instance);
 

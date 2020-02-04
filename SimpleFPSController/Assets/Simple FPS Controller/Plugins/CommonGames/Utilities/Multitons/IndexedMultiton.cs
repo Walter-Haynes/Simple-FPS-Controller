@@ -27,7 +27,7 @@ namespace CommonGames.Utilities
         [HorizontalGroup(@group: "Index")]
         [PropertyTooltip(tooltip: "Index"), HideLabel]
         [ShowInInspector]
-        public int Index => IndexFromInstance(instance: this as T);
+        public override int Index => IndexFromInstance(instance: this as T);
 
         [HorizontalGroup(@group: "Index")]
         [Button(name: "＋")]

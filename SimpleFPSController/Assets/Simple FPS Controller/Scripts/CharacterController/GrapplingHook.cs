@@ -4,8 +4,10 @@ namespace SimpleFPSController.PlayerSystems.Movement
 {
     using CommonGames.Utilities.Extensions;
     
+    using Physics = UnityEngine.Physics;
+    
     [RequireComponent(typeof(FPSCamera))]
-    public class GrapplingHook : CharacterBehaviour
+    public class GrapplingHook : PlayerBehaviour
     {
         #region Variables
 
@@ -23,7 +25,8 @@ namespace SimpleFPSController.PlayerSystems.Movement
 
         #region Component Accessors
 
-        public WallRun WallRun => wallRun = wallRun.TryGetIfNull(this); //Or get from the Player??
+        //public WallRun WallRun => wallRun = wallRun.TryGetIfNull(this);
+        public WallRun WallRun => wallRun = Player.CharacterBehaviours.GetOfType<PlayerBehaviour, WallRun>() as WallRun;
 
         #endregion
 
@@ -41,9 +44,9 @@ namespace SimpleFPSController.PlayerSystems.Movement
 
         #region Methods
 
-        private void Start()
+        private void OnValidate()
         {
-            WallRun.gHook = this;
+            wallRun = WallRun;
         }
 
         private void Update()
@@ -57,7 +60,7 @@ namespace SimpleFPSController.PlayerSystems.Movement
                     Player.DisableMovement();
                     
                     momentum = Vector3.zero;
-                    _wallRun.EndWallRun();
+                    WallRun.EndWallRun();
                     
                     __DecreaseMagnitude();
                 }
@@ -76,8 +79,8 @@ namespace SimpleFPSController.PlayerSystems.Movement
                     dir = (grapplingLocation - __playerPosition).normalized;
                     momentum = dir * (hookSpeed * Mathf.Clamp01(distance));
                     
-                    _lineRenderer.SetPosition(0, __playerPosition - Vector3.up);
-                    _lineRenderer.SetPosition(1, grapplingLocation);
+                    lineRenderer.SetPosition(0, __playerPosition - Vector3.up);
+                    lineRenderer.SetPosition(1, grapplingLocation);
 
                     __DecreaseMagnitude();
                 }
@@ -112,8 +115,8 @@ namespace SimpleFPSController.PlayerSystems.Movement
             
             Player.EnableMovement();
             
-            _lr.SetPosition(0, Vector3.zero);
-            _lr.SetPosition(1, Vector3.zero);
+            lineRenderer.SetPosition(0, Vector3.zero);
+            lineRenderer.SetPosition(1, Vector3.zero);
         }
         
         #endregion

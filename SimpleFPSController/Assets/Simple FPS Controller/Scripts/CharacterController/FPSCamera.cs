@@ -1,8 +1,10 @@
 ﻿using System;
 using UnityEngine;
 
+using SimpleFPSController.PlayerSystems.Movement;
+
 [RequireComponent(typeof(Camera))]
-public class FPSCamera : MonoBehaviour
+public class FPSCamera : PlayerBehaviour
 {
     #region Variables
 
@@ -12,16 +14,17 @@ public class FPSCamera : MonoBehaviour
     [HideInInspector] public float mouseX, mouseY;
     private float rotationX, rotationY;
     [HideInInspector] public float aimedZRotation = 0, rotationZ; // the rotation in z axis(mainly used for shake effect)
-
-    public Transform Player;
+    
     public Transform CameraPosition;
     
     #endregion
     
     #region Methods
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+        
         Application.targetFrameRate = 90;
     }
 
@@ -37,13 +40,12 @@ public class FPSCamera : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
-        
-        WallRun.fpsCam = WeaponSway.fpsCam = this;
-        PlayerCore.cam = this.GetComponent<Camera>();
+
         EffectsManager.postProcessing = this.GetComponent<UnityEngine.Rendering.Volume>();
         EffectsManager.SetupPostProcessing();
 
-        Player.GetComponent<PlayerCore>().SetupFOV(PlayerCore.cam.fieldOfView);
+        //TODO: Redo this:
+        //Player.SetupFOV(Player.fieldOfView);
     }
     
     private void Update()
@@ -60,7 +62,9 @@ public class FPSCamera : MonoBehaviour
         // Rotating
         rotationZ = Mathf.Lerp(rotationZ, aimedZRotation, Time.deltaTime * 8);
         transform.localRotation = Quaternion.Euler(rotationX, rotationY, rotationZ);
-        Player.Rotate(Vector3.up * mouseX);
+        
+        //TODO: Redo this:
+        //Player.Rotate(Vector3.up * mouseX);
 
         transform.position = CameraPosition.position;
     }

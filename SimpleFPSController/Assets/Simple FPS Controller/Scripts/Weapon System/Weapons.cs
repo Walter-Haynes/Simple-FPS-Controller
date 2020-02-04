@@ -1,186 +1,188 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine;
 
-public class Weapons : MonoBehaviour
+namespace SimpleFPSController.PlayerSystems.Weapons
 {
-    #region Variables
+    using CommonGames.Utilities.Extensions;
+    using SimpleFPSController.PlayerSystems.Movement;
+    using Physics = UnityEngine.Physics;
 
-    public static byte weaponIndex = 0;
-    public Weapon[] weapons;
-    
-    private bool reloading = false;
-    private float reloadingTimer = 0.0f, maxDistanceToTravel;
-    private Vector3 lastPosition;
-    private Rigidbody fillerRb;
-
-    public AudioSource noAmmo, shot;
-    
-    private RaycastHit hitInfo;
-
-    [Header("Effects")]
-    public GameObject Explosion;
-    public static GameObject ExplosionFX;
-    
-    #endregion
-
-    #region Methods
-
-    private void Awake()
+    public class Weapons : PlayerBehaviour
     {
-        ExplosionFX = Explosion;
-    }
+        #region Variables
 
-    private void Start()
-    {
-        for(byte i = 0; i < weapons.Length; ++i)
-            weapons[i].WeaponObj.SetActive(false);
+        public static byte weaponIndex = 0;
+        public Weapon[] weapons;
 
-        ChangeWeapon(0);
-        weapons[weaponIndex].AmmoUI.text = weapons[weaponIndex].leftAmmoInFiller + "/" + weapons[weaponIndex].ammo;
+        private bool reloading = false;
+        private float reloadingTimer = 0.0f, maxDistanceToTravel;
+        private Vector3 lastPosition;
+        private Rigidbody fillerRb;
 
-        Ammo._weapons_ = this;
-    }
+        public AudioSource noAmmo, shot;
 
-    private uint DifferenceInAmmo;
+        private RaycastHit hitInfo;
 
-    private void Update()
-    {
-        if (!reloading)
+        [Header("Effects")]
+        public GameObject Explosion;
+
+        public static GameObject ExplosionFX;
+
+        #endregion
+
+        #region Methods
+
+        private void Awake()
         {
-            if (Input.GetMouseButton(0))
-            {
-                Shoot();
-            }
-
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                if (weapons[weaponIndex].ammo > 0)
-                {
-                    DifferenceInAmmo = weapons[weaponIndex].maxAmmoInAFiller - weapons[weaponIndex].leftAmmoInFiller;
-                    if (DifferenceInAmmo < weapons[weaponIndex].ammo)
-                    {
-                        weapons[weaponIndex].ammo -= DifferenceInAmmo;
-                        weapons[weaponIndex].leftAmmoInFiller += DifferenceInAmmo;
-                    }
-                    else
-                    {
-                        weapons[weaponIndex].leftAmmoInFiller += weapons[weaponIndex].ammo;
-                        weapons[weaponIndex].ammo = 0;
-                    }
-
-                    weapons[weaponIndex].AmmoUI.text = weapons[weaponIndex].leftAmmoInFiller + "/" + weapons[weaponIndex].ammo;
-                    fillerRb.isKinematic = false;
-
-                    reloading = true;
-                    reloadingTimer = 0.0f;
-                    lastPosition = weapons[weaponIndex].WeaponFiller.localPosition;
-                }
-            }
+            ExplosionFX = Explosion;
         }
-        else
+
+        private void Start()
         {
-            reloadingTimer += Time.deltaTime;
-            if (reloadingTimer >= weapons[weaponIndex].reloadTime / 2.0f)
-            {
-                if (reloadingTimer <= weapons[weaponIndex].reloadTime)
-                {
-                    fillerRb.isKinematic = true;
-                    weapons[weaponIndex].WeaponFiller.localPosition = Vector3.Lerp(weapons[weaponIndex].WeaponFiller.localPosition, lastPosition, Time.deltaTime * 25);
-                }
-                else
-                    reloading = false;
-            }
-        }
-    }
+            for(byte i = 0; i < weapons.Length; ++i)
+                weapons[i].WeaponObj.SetActive(false);
 
-    private float shootingTime = 0.0f;
-    public void Shoot()
-    {
-        shootingTime += Time.deltaTime;
-        if (shootingTime < weapons[weaponIndex].shootTime)
-            return;
-        shootingTime = 0;
-
-        if(weapons[weaponIndex].leftAmmoInFiller > 0)
-        {
-            shot.Play();
-            weapons[weaponIndex].muzzleFlash.Play();
-
-            --weapons[weaponIndex].leftAmmoInFiller;
+            ChangeWeapon(0);
             weapons[weaponIndex].AmmoUI.text = weapons[weaponIndex].leftAmmoInFiller + "/" + weapons[weaponIndex].ammo;
 
-            weapons[weaponIndex].weaponSway.Recoil();
+            Ammo._weapons = this;
+        }
 
-            if(Physics.Raycast(transform.position, transform.forward, out hitInfo))
+        private uint DifferenceInAmmo;
+
+        private void Update()
+        {
+            if(!reloading)
             {
-                ExplodingBarrel expl;
-                if (hitInfo.transform.TryGetComponent<ExplodingBarrel>(out expl))
-                    expl.Explode();
+                if(Input.GetMouseButton(0))
+                {
+                    Shoot();
+                }
+
+                if(Input.GetKeyDown(KeyCode.R))
+                {
+                    if(weapons[weaponIndex].ammo > 0)
+                    {
+                        DifferenceInAmmo = weapons[weaponIndex].maxAmmoInAFiller -
+                                           weapons[weaponIndex].leftAmmoInFiller;
+                        if(DifferenceInAmmo < weapons[weaponIndex].ammo)
+                        {
+                            weapons[weaponIndex].ammo -= DifferenceInAmmo;
+                            weapons[weaponIndex].leftAmmoInFiller += DifferenceInAmmo;
+                        }
+                        else
+                        {
+                            weapons[weaponIndex].leftAmmoInFiller += weapons[weaponIndex].ammo;
+                            weapons[weaponIndex].ammo = 0;
+                        }
+
+                        weapons[weaponIndex].AmmoUI.text =
+                            weapons[weaponIndex].leftAmmoInFiller + "/" + weapons[weaponIndex].ammo;
+                        fillerRb.isKinematic = false;
+
+                        reloading = true;
+                        reloadingTimer = 0.0f;
+                        lastPosition = weapons[weaponIndex].WeaponFiller.localPosition;
+                    }
+                }
+            }
+            else
+            {
+                reloadingTimer += Time.deltaTime;
+                if(reloadingTimer >= weapons[weaponIndex].reloadTime / 2.0f)
+                {
+                    if(reloadingTimer <= weapons[weaponIndex].reloadTime)
+                    {
+                        fillerRb.isKinematic = true;
+                        weapons[weaponIndex].WeaponFiller.localPosition = Vector3.Lerp(
+                            weapons[weaponIndex].WeaponFiller.localPosition, lastPosition, Time.deltaTime * 25);
+                    }
+                    else
+                        reloading = false;
+                }
             }
         }
-        else
+
+        private float shootingTime = 0.0f;
+
+        public void Shoot()
         {
-            // No ammo sound
-            noAmmo.Play();
+            shootingTime += Time.deltaTime;
+            if(shootingTime < weapons[weaponIndex].shootTime) return;
+            shootingTime = 0;
+
+            if(weapons[weaponIndex].leftAmmoInFiller > 0)
+            {
+                shot.Play();
+                weapons[weaponIndex].muzzleFlash.Play();
+
+                --weapons[weaponIndex].leftAmmoInFiller;
+                weapons[weaponIndex].AmmoUI.text =
+                    weapons[weaponIndex].leftAmmoInFiller + "/" + weapons[weaponIndex].ammo;
+
+                weapons[weaponIndex].weaponSway.Recoil();
+
+                if(!Physics.Raycast(transform.position, transform.forward, out hitInfo)) return;
+                
+                ExplodingBarrel expl;
+                
+                if(hitInfo.transform.TryGetComponent(out expl))
+                {
+                    expl.Explode();
+                }
+                
+            }
+            else
+            {
+                // No ammo sound
+                noAmmo.Play();
+            }
         }
 
-        /*if (weapons[weaponIndex].leftAmmoInFiller != 0)
+        public void ChangeWeapon(byte _weaponIndex_)
         {
-            --weapons[weaponIndex].leftAmmoInFiller;
-            weapons[weaponIndex].Ammo.text = weapons[weaponIndex].leftAmmoInFiller + "/" + 
-                ((int)(weapons[weaponIndex].maxAmmo * (weapons[weaponIndex].fillers - 1)) + weapons[weaponIndex].leftAmmoInFiller);
-            //weapons[weaponIndex].muzzleFlash.Play();
-
-            weapons[weaponIndex].weaponSway.Recoil();
-        }
-        else
-        {
-            // No ammo sound
-            weapons[weaponIndex].Ammo.text = weapons[weaponIndex].leftAmmoInFiller + "/" +
-                ((int)(weapons[weaponIndex].maxAmmo * (weapons[weaponIndex].fillers - 1)) + weapons[weaponIndex].leftAmmoInFiller);
-
-        }*/
-    }
-
-    public void ChangeWeapon(byte _weaponIndex_)
-    {
-        if(_weaponIndex_ < weapons.Length)
-        {
+            if(_weaponIndex_ >= weapons.Length) return;
+            
             weapons[_weaponIndex_].WeaponObj.SetActive(false);
             weaponIndex = _weaponIndex_;
             weapons[_weaponIndex_].WeaponObj.SetActive(true);
 
             fillerRb = weapons[weaponIndex].WeaponFiller.GetComponent<Rigidbody>();
+            weapons[weaponIndex].AmmoUI.text =
+                weapons[weaponIndex].leftAmmoInFiller + "/" + weapons[weaponIndex].ammo;
+        }
+
+        public void AddAmmo(uint newAmmo)
+        {
+            weapons[weaponIndex].ammo += newAmmo;
             weapons[weaponIndex].AmmoUI.text = weapons[weaponIndex].leftAmmoInFiller + "/" + weapons[weaponIndex].ammo;
         }
+
+        #endregion
     }
 
-    public void AddAmmo(uint newAmmo)
+    [Serializable]
+    public class Weapon
     {
-        weapons[weaponIndex].ammo += newAmmo;
-        weapons[weaponIndex].AmmoUI.text = weapons[weaponIndex].leftAmmoInFiller + "/" + weapons[weaponIndex].ammo;
+        [Header("Objects")]
+        public GameObject WeaponObj;
+
+        public Transform WeaponFiller;
+        public WeaponSway weaponSway;
+
+        [Header("Specification")]
+        public uint maxAmmoInAFiller = 30;
+
+        public uint ammo = 600;
+        public uint leftAmmoInFiller = 30;
+        public float reloadTime = 1;
+        public float shootTime = 0.0f;
+
+        [Header("Effects")]
+        public Text AmmoUI;
+
+        public ParticleSystem muzzleFlash;
     }
-    
-    #endregion
-}
-
-[Serializable]
-public class Weapon
-{
-    [Header("Objects")]
-    public GameObject WeaponObj;
-    public Transform WeaponFiller;
-    public WeaponSway weaponSway;
-
-    [Header("Specification")]
-    public uint maxAmmoInAFiller = 30;
-    public uint ammo = 600;
-    public uint leftAmmoInFiller = 30;
-    public float reloadTime = 1;
-    public float shootTime = 0.0f;
-
-    [Header("Effects")]
-    public Text AmmoUI;
-    public ParticleSystem muzzleFlash;
 }

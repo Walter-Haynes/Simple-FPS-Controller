@@ -9,10 +9,10 @@ namespace SimpleFPSController.PlayerSystems.Movement
     using CommonGames.Utilities.Extensions;
 
     /// <summary>
-    /// Inherit from VehicleBehaviour if you want a MonoBehaviour with access to your Vehicle.
-    /// It's basically a shorthand so I can just call all childed VehicleBehaviours from the VehicleCore on Start and send them the proper index.
+    /// Inherit from <see cref="PlayerBehaviour"/> if you want a MonoBehaviour with access to your Players.
+    /// It's basically a shorthand so I can just call all childed PlayerBehaviours from the PlayerCore on Start and send them the proper index.
     /// </summary>
-    public abstract class CharacterBehaviour : MonoBehaviour
+    public abstract class PlayerBehaviour : MonoBehaviour
     {
         #region Variables
 
@@ -27,8 +27,8 @@ namespace SimpleFPSController.PlayerSystems.Movement
         [UsedImplicitly]
         protected bool IsInitialized = false;
 
-        /// <summary> The Index of our VehicleCore reference in it's <see cref="IndexedMultiton{T}"/>'s List </summary>
-        public int VehicleIndex { get; set; } = -1;
+        /// <summary> The Index of our PlayerCore reference in it's <see cref="IndexedMultiton{T}"/>'s List </summary>
+        public int PlayerIndex { get; set; } = -1;
         
         #endregion
 
@@ -41,9 +41,9 @@ namespace SimpleFPSController.PlayerSystems.Movement
             SetupReferences();
         }
 
-        /// <summary> Sets the Vehicle's <see cref= "VehicleCore"/> reference to this vehicle's VehicleCore </summary>
+        /// <summary> Sets the Player's <see cref= "PlayerCore"/> reference. </summary>
         public virtual void SetupReferences()
-            => Player = Player ? Player : PlayerCore.Instances[VehicleIndex];
+            => Player = Player ? Player : PlayerCore.Instances[PlayerIndex];
 
         #endregion
         

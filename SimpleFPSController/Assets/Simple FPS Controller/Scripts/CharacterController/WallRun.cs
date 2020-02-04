@@ -2,40 +2,43 @@
 
 namespace SimpleFPSController.PlayerSystems.Movement
 {
+    using CommonGames.Utilities.Extensions;
+    using Physics = UnityEngine.Physics;
+    
     [RequireComponent(typeof(PlayerCore))] // this also requires Character Controller
-    public class WallRun : CharacterBehaviour
+    public class WallRun : PlayerBehaviour
     {
         #region Variables
 
-        public static FPSCamera fpsCam;
-
         private RaycastHit hitInfo;
-        private PlayerCore pvm;
+        
         private bool attachedOnWall;
         private bool directionToCheckForWall = false; // False is left and True is right
-        private Vector3 velocity, zeroVector;
+        private Vector3 velocity;
         private float timerToAttachToNextWall;
 
+        [SerializeField] private GrapplingHook grapplingHook = null; 
+
         [Header("Specifications to attach")]
-        public float maxDistanceToAttachToWall; // The maximum distance needed for the player to attach to a wall
+        [SerializeField] private float maxDistanceToAttachToWall; // The maximum distance needed for the player to attach to a wall
 
         [Header("Specifications for run")]
-        public float runningSpeed = 2.5f;
+        [SerializeField] private float runningSpeed = 2.5f;
 
-        public float dampingVelocity = 4f;
-        public float heightForce = 8f;
-        public float sideForce = 5f;
+        [SerializeField] private float dampingVelocity = 4f;
+        [SerializeField] private float heightForce = 8f;
+        [SerializeField] private float sideForce = 5f;
+        
+        #region Component Accessors
+
+        //public WallRun WallRun => wallRun = wallRun.TryGetIfNull(this);
+        public GrapplingHook GrapplingHook => grapplingHook = Player.CharacterBehaviours.GetOfType<PlayerBehaviour, GrapplingHook>() as GrapplingHook;
+
+        #endregion
 
         #endregion
 
         #region Methods
-
-        private void Start()
-        {
-            pvm = GetComponent<PlayerCore>();
-
-            zeroVector = Vector3.zero;
-        }
 
         private void Update()
         {
@@ -49,12 +52,12 @@ namespace SimpleFPSController.PlayerSystems.Movement
                     {
                         if(hitInfo.transform.CompareTag("WallRun"))
                         {
-                            if(pvm.v <= 0)
-                                return;
+                            if(Player.verticalInput <= 0) return;
+                            
                             directionToCheckForWall = true;
                             BeginWallRun(10);
 
-                            goto _WallRunning_Method_;
+                            __WallRunning();
                         }
                     }
 
@@ -62,59 +65,66 @@ namespace SimpleFPSController.PlayerSystems.Movement
                     {
                         if(hitInfo.transform.CompareTag("WallRun"))
                         {
-                            if(pvm.v <= 0)
-                                return;
+                            if(Player.verticalInput <= 0) return;
+                            
                             directionToCheckForWall = false;
                             BeginWallRun(-10);
 
-                            goto _WallRunning_Method_;
+                            __WallRunning();
                         }
                     }
                 }
             }
 
-            _WallRunning_Method_:
-            if(attachedOnWall)
-                WallRunning();
+            __WallRunning();
 
-            if(velocity != zeroVector)
+            void __WallRunning()
             {
-                velocity -= Vector3.Normalize(velocity) * dampingVelocity * Time.deltaTime;
-                if(velocity.sqrMagnitude <= .2f)
-                    velocity = zeroVector;
-            }
+                if(attachedOnWall) WallRunning();
 
-            pvm.velocity += velocity + inputVelocity;
+                if(velocity != Vector3.zero)
+                {
+                    velocity -= Vector3.Normalize(velocity) * dampingVelocity * Time.deltaTime;
+                
+                    if(velocity.sqrMagnitude <= .2f)
+                    {
+                        velocity = Vector3.zero;
+                    }
+                }
+
+                Player.velocity += velocity + inputVelocity;
+            }
         }
 
         /// <param name="zRotation"> The Z rotation of the camera </param>
         private void BeginWallRun(float zRotation)
         {
             attachedOnWall = true;
-            pvm.useGravity = false;
+            Player.useGravity = false;
             
-            pvm.DisableMovement();
+            Player.DisableMovement();
             
-            fpsCam.aimedZRotation = zRotation;
-            velocity = zeroVector;
+            Player.PlayerFPSCamera.aimedZRotation = zRotation;
+            velocity = Vector3.zero;
 
-            gHook.Unhook();
-            gHook.momentum = zeroVector;
+            GrapplingHook.Unhook();
+            GrapplingHook.momentum = Vector3.zero;
         }
 
         public void EndWallRun()
         {
             attachedOnWall = false;
-            pvm.useGravity = true;
-            pvm.EnableMovement();
-            fpsCam.aimedZRotation = 0;
+            Player.useGravity = true;
+            Player.EnableMovement();
+            
+            Player.PlayerFPSCamera.aimedZRotation = 0;
             timerToAttachToNextWall = .2f;
-            inputVelocity = zeroVector;
+            inputVelocity = Vector3.zero;
         }
 
         private void WallRunning()
         {
-            if(pvm.v <= 0)
+            if(Player.verticalInput <= 0)
             {
                 EndWallRun();
                 return;

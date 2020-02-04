@@ -8,7 +8,7 @@ using SimpleFPSController.PlayerSystems.Movement;
 using Physics = UnityEngine.Physics;
 
 [RequireComponent(typeof(Rigidbody))]
-public class ExplodingBarrel : CharacterBehaviour
+public class ExplodingBarrel : PlayerBehaviour
 {
     public float 
         explosionRange = 15, 

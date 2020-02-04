@@ -1,61 +1,68 @@
 ﻿using UnityEngine;
 
-public class Ammo : MonoBehaviour
+namespace SimpleFPSController.PlayerSystems.Weapons
 {
-    #region Variables
-    
-    public static Weapons _weapons_;
-    public uint ammo = 30;
-    public bool isInside = false;
+    using CommonGames.Utilities.Extensions;
+    using SimpleFPSController.PlayerSystems.Movement;
 
-    public void OnTriggerEnter(Collider col)
+    public class Ammo : PlayerBehaviour
     {
-        if (col.CompareTag("Player"))
+        #region Variables
+
+        public static Weapons _weapons;
+        public uint ammo = 30;
+        public bool isInside = false;
+
+        public void OnTriggerEnter(Collider col)
         {
-            isInside = true;
+            if(col.CompareTag("Player"))
+            {
+                isInside = true;
+            }
         }
-    }
 
-    public void OnTriggerExit(Collider col)
-    {
-        if (col.CompareTag("Player"))
+        public void OnTriggerExit(Collider col)
         {
-            isInside = false;
+            if(col.CompareTag("Player"))
+            {
+                isInside = false;
+            }
         }
-    }
-    
-    private static Vector3 upVector = Vector3.up;
-    private static float amplitude = .7f;
 
-    public Vector3 initialPosition;
-    private void Start()
-    {
-        initialPosition = transform.localPosition;
-    }
+        private static Vector3 upVector = Vector3.up;
+        private static float amplitude = .7f;
 
-    private float timer = 0.0f;
-    
-    #endregion
+        public Vector3 initialPosition;
 
-    #region Methods
-
-    private void Update()
-    {
-        timer += Time.deltaTime * EffectsManager.currentTimeScale;
-        if (timer > 3.14f)
-            timer -= 6.28f;
-
-        //Debug.Log(timer + " " + Sin(timer));
-
-        transform.localPosition = initialPosition +
-            upVector * Mathf.Sin(timer) * amplitude;
-
-        if (isInside)
+        private void Start()
         {
-            _weapons_.AddAmmo(ammo);
-            Destroy(this.gameObject);
+            initialPosition = transform.localPosition;
         }
+
+        private float timer = 0.0f;
+
+        #endregion
+
+        #region Methods
+
+        private void Update()
+        {
+            timer += Time.deltaTime * EffectsManager.currentTimeScale;
+            if(timer > 3.14f)
+                timer -= 6.28f;
+
+            //Debug.Log(timer + " " + Sin(timer));
+
+            transform.localPosition = initialPosition +
+                                      upVector * Mathf.Sin(timer) * amplitude;
+
+            if(isInside)
+            {
+                _weapons.AddAmmo(ammo);
+                Destroy(this.gameObject);
+            }
+        }
+
+        #endregion
     }
-    
-    #endregion
 }
