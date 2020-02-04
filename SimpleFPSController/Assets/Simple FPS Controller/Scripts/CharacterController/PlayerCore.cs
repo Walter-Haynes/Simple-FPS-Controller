@@ -20,15 +20,15 @@ namespace SimpleFPSController.PlayerSystems.Movement
 
         private CharacterController _motor = null;
         [PublicAPI]
-        public CharacterController PlayerMotor => _motor = _motor.TryGetIfNull(context: this);
+        public CharacterController PlayerMotor => _motor = _motor.TryGetInChildrenIfNull(context: this);
 
         private Camera _playerCamera = null;
         [PublicAPI]
-        public Camera PlayerCamera => _playerCamera = _playerCamera.TryGetIfNull(context: this);
+        public Camera PlayerCamera => _playerCamera = _playerCamera.TryGetInChildrenIfNull(context: this);
 
         private FPSCamera _playerFpsCamera = null;
         [PublicAPI]
-        public FPSCamera PlayerFPSCamera => _playerFpsCamera = _playerFpsCamera.TryGetIfNull(context: this);
+        public FPSCamera PlayerFPSCamera => _playerFpsCamera = _playerFpsCamera.TryGetInChildrenIfNull(context: this);
 
         private List<PlayerBehaviour> _characterBehaviours = new List<PlayerBehaviour>();
 
@@ -237,8 +237,10 @@ namespace SimpleFPSController.PlayerSystems.Movement
                 }
             }
 
-            PlayerCamera.fieldOfView = Mathf.Lerp(PlayerCamera.fieldOfView, FOVAim,
+            /*
+             PlayerCamera.fieldOfView = Mathf.Lerp(PlayerCamera.fieldOfView, FOVAim,
                 Time.deltaTime * EffectsManager.currentTimeScale * 8);
+             */
         }
 
         private Vector3 lastFramePosition;

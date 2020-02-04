@@ -19,8 +19,8 @@ public class EffectsManager : MonoBehaviour
     // The audio that is affected by the slowmotion
     [Header("Audio")]
     public AudioSource background;
-    public AudioSource shot;
-    public AudioSource noAmmo;
+    //public AudioSource shot;
+    //public AudioSource noAmmo;
     
     #endregion
 
@@ -68,7 +68,7 @@ public class EffectsManager : MonoBehaviour
         if ((currentTimeScale - timeScaleAim) * (currentTimeScale - timeScaleAim) > .00001f)
         {
             currentTimeScale = Mathf.Lerp(currentTimeScale, timeScaleAim, Time.deltaTime * 7);
-            background.pitch = shot.pitch = noAmmo.pitch = currentTimeScale;
+            background.pitch = currentTimeScale;
 
             Time.timeScale = currentTimeScale;
         }
