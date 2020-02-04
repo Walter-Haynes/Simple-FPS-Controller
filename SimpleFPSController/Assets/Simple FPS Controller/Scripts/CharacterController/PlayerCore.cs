@@ -1,53 +1,77 @@
 ﻿using UnityEngine;
 
+using JetBrains.Annotations;
+
+using CommonGames.Utilities;
+using CommonGames.Utilities.Extensions;
+
+using Physics = UnityEngine.Physics;
+
 [RequireComponent(typeof(CharacterController))]
-public class PlayerMovement : MonoBehaviour
+public class PlayerCore : Multiton<PlayerCore>
 {
     #region Variables
+
+    #region Component Accessors
+
+    private CharacterController _motor = null;
+    [PublicAPI]
+    public CharacterController PlayerMotor => _motor = _motor.TryGetIfNull(context: this);
     
-    public static CharacterController characterController;
-    public static Camera cam;
+    private Camera _playerCamera = null;
+    [PublicAPI]
+    public Camera PlayerCamera => _playerCamera = _playerCamera.TryGetIfNull(context: this);
+    
+    private FPSCamera _playerFpsCamera = null;
+    [PublicAPI]
+    public FPSCamera PlayerFPSCamera => _playerFpsCamera = _playerFpsCamera.TryGetIfNull(context: this);
+
+    #endregion
+
+    #region Shown
 
     [Header("Player Movement")]
     public float speed = 12f;
     public float dampingVelocity = 0.4f;
     
     private bool enableMovement = true;
+        
+    [Header("Gravity")]
+    public bool useGravity = true;
+    [SerializeField] private readonly Vector3 groundCheckOffset = new Vector3(0,-1.35f,0);
+    [SerializeField] private readonly float maxGroundDistance = 0.4f;
     
+    [Header("Jump")]
+    public float jumpHeight = 15f;
+    
+    [Header("Effects")]
+    public ParticleSystem HyperDrive;
+    public float maxFOV = 105;
+
+    #endregion
+
     [HideInInspector] public float v, h;
     [HideInInspector] public Vector3 velocity, inputVelocity, gravityVector, explosionVelocity, slidingMomentum;
 
-    [Header("Gravity")]
-    public bool useGravity = true;
-    public Vector3 groundCheckOffset = new Vector3(0,-1.35f,0);
-    public float maxGroundDistance = 0.2f;
-    
     private RaycastHit hitInfo;
     
-    [HideInInspector]
-    public bool isGrounded = false;
+    [HideInInspector] public bool isGrounded = false;
     private float slopeAngle, slidingTime;
-
-    [Header("Jump")]
-    public float jumpHeight = 15f;
+    
     private float jumpForce;
 
-    [Header("Effects")]
-    public ParticleSystem HyperDrive;
+    [HideInInspector] public float 
+        FOVAim = 0f, 
+        DefaultFOV = 0f;
 
-    [HideInInspector]
-    public float FOVAim = 0.0f, DefaultFOV;
-    public float maxFOV = 105;
-    
     #endregion
 
     #region Methods
 
+    [UsedImplicitly]
     private void Start()
     {
-        characterController = this.GetComponent<CharacterController>();
-
-        GrapplingHook.pvm = this;
+        //GrapplingHook.pvm = this;
 
         jumpForce = Mathf.Sqrt(-Physics.gravity.y * jumpHeight);
     }
@@ -58,6 +82,7 @@ public class PlayerMovement : MonoBehaviour
         FOVAim = DefaultFOV;
     }
 
+    [UsedImplicitly]
     private void Update()
     {
         v = Input.GetAxis("Vertical");
@@ -97,14 +122,20 @@ public class PlayerMovement : MonoBehaviour
                 {
                     // Sliding
                     slopeAngle = Vector3.Angle(transform.up, hitInfo.normal);
-                    if (slopeAngle > characterController.slopeLimit)
+                    
+                    if (slopeAngle > PlayerMotor.slopeLimit)
                     {
                         slidingTime += Time.deltaTime * EffectsManager.currentTimeScale;
                         slidingMomentum += (hitInfo.normal - transform.up) * Mathf.Clamp01(slidingTime * 1.1f) * slopeAngle * 2;
                         inputVelocity *= .1f;
 
-                        if (Input.GetKeyDown(KeyCode.Space))
-                            gravityVector += (transform.up * slopeAngle * .7f + transform.forward * slopeAngle * .3f);// * Mathf.Clamp01(slidingTime / 1.2f);// * Mathf.Clamp01(slidingTime / 2);//hitInfo.normal * jumpForce * Mathf.Clamp01(slidingTime) * slopeAngle;
+                        if(Input.GetKeyDown(KeyCode.Space))
+                        {
+                            gravityVector +=
+                                (transform.up * slopeAngle * .7f +
+                                 transform.forward * slopeAngle * .3f
+                                ); // * Mathf.Clamp01(slidingTime / 1.2f);// * Mathf.Clamp01(slidingTime / 2);//hitInfo.normal * jumpForce * Mathf.Clamp01(slidingTime) * slopeAngle;
+                        }
                     }
                 }
             }
@@ -124,14 +155,18 @@ public class PlayerMovement : MonoBehaviour
             __distanceSquared = lastFramePosition.DistanceSquared(transform.position);
             if (__distanceSquared > 10 * EffectsManager.currentTimeScale)
             {
-                if (!HyperDrive.isPlaying)
+                if(!HyperDrive.isPlaying)
+                {
                     HyperDrive.Play();
+                }
             }
             else
             {
                 FOVAim = DefaultFOV;
-                if (HyperDrive.isPlaying)
+                if(HyperDrive.isPlaying)
+                {
                     HyperDrive.Stop();
+                }
             }
 
             FOVAim = __distanceSquared > 30 
@@ -142,17 +177,20 @@ public class PlayerMovement : MonoBehaviour
             lastFramePosition = transform.position;
         }
         
-        characterController.Move((velocity + inputVelocity + gravityVector + slidingMomentum + explosionVelocity) * (Time.deltaTime * EffectsManager.currentTimeScale));
+        PlayerMotor.Move((velocity + inputVelocity + gravityVector + slidingMomentum + explosionVelocity) * (Time.deltaTime * EffectsManager.currentTimeScale));
         velocity = Vector3.zero;
 
         if(explosionVelocity != Vector3.zero)
         {
             explosionVelocity -= explosionVelocity.normalized * (10 * Time.deltaTime);
-            if (explosionVelocity.sqrMagnitude <= .001f)
+            
+            if(explosionVelocity.sqrMagnitude <= .001f)
+            {
                 explosionVelocity = Vector3.zero;
+            }
         }
 
-        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, FOVAim, Time.deltaTime * EffectsManager.currentTimeScale * 8);
+        PlayerCamera.fieldOfView = Mathf.Lerp(PlayerCamera.fieldOfView, FOVAim, Time.deltaTime * EffectsManager.currentTimeScale * 8);
     }
     
     private Vector3 lastFramePosition;
@@ -184,11 +222,10 @@ public class PlayerMovement : MonoBehaviour
         Gizmos.color = Color.cyan;
         Gizmos.DrawRay(from: __groundCheckOrigin, direction: Vector3.down * maxGroundDistance);
 
-        if(Physics.Raycast(origin: __groundCheckOrigin, direction: Vector3.down, out hitInfo, maxGroundDistance))
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(center: hitInfo.point, radius: 0.05f);
-        }
+        if(!Physics.Raycast(origin: __groundCheckOrigin, direction: Vector3.down, out hitInfo, maxGroundDistance)) return;
+        
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(center: hitInfo.point, radius: 0.05f);
 
     }
 

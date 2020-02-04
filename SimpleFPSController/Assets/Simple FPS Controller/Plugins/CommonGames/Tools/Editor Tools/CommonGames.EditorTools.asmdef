@@ -1,0 +1,17 @@
+{
+    "name": "CommonGames.EditorTools",
+    "references": [
+        "GUID:3ae1434af50ef2c47847435c3c7e103c"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

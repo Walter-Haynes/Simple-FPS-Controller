@@ -1,8 +1,14 @@
 ﻿using System;
 using UnityEngine;
 
+using CommonGames.Utilities.Extensions;
+
+using SimpleFPSController.PlayerSystems.Movement;
+
+using Physics = UnityEngine.Physics;
+
 [RequireComponent(typeof(Rigidbody))]
-public class ExplodingBarrel : MonoBehaviour
+public class ExplodingBarrel : CharacterBehaviour
 {
     public float 
         explosionRange = 15, 
@@ -13,11 +19,8 @@ public class ExplodingBarrel : MonoBehaviour
     public void Explode()
     {
         Vector3 explosionPos = transform.position + Vector3.up;
-
-        // Spawning an explosion
+        
         ParticleSystem spawnedExplosion = Instantiate(Weapons.ExplosionFX, explosionPos, Quaternion.Euler(Vector3.zero)).GetComponent<ParticleSystem>();
-
-        // Destroying the explosion after its duration
         Destroy(spawnedExplosion.gameObject, spawnedExplosion.main.duration);
 
         //Collider[] cols = Physics.OverlapSphere(explosionPos, explosionRange);
@@ -25,14 +28,12 @@ public class ExplodingBarrel : MonoBehaviour
         
         int __colliderCount = Physics.OverlapSphereNonAlloc(explosionPos, explosionRange, results: _colliders);
 
-        GrapplingHook.pvm.explosionVelocity += Vector3.ClampMagnitude(
-            (PlayerMovement.characterController.transform.position - explosionPos).normalized *
-            Mathf.Clamp(value: 1.0f / explosionPos.DistanceSquared(PlayerMovement.characterController.transform.position), 0, .5f) * 
-            explosionForce / 80.0f, 
-            50);
+        float __explosionPlayerDistanceSquared = explosionPos.DistanceSquared(Player.PlayerMotor.transform.position);
         
-        //GrapplingHook.pvm.gravityVector += (PlayerMovement.characterController.transform.position - explosionPos).normalized * Mathf.Clamp(1.0f / GrapplingHook.DistanceSquared(explosionPos, PlayerMovement.characterController.transform.position), 0, .35f) * explosionForce / 80.0f;
-        //PlayerMovement.characterController.Move((PlayerMovement.characterController.transform.position - explosionPos).normalized * (1.0f / GrapplingHook.DistanceSquared(explosionPos, PlayerMovement.characterController.transform.position)) * explosionForce / 50.0f);
+        Vector3 __explosionVector = (Player.PlayerMotor.transform.position - explosionPos).normalized *
+                                    (1.0f / __explosionPlayerDistanceSquared).Clamp(min: 0, max: 0.5f) * explosionForce;
+        
+        Player.explosionVelocity += Vector3.ClampMagnitude(__explosionVector, maxLength: 50);
 
         for(int __index = 0; __index < __colliderCount; __index++)
         {

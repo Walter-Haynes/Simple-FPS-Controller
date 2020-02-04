@@ -39,11 +39,11 @@ public class FPSCamera : MonoBehaviour
         }
         
         WallRun.fpsCam = WeaponSway.fpsCam = this;
-        PlayerMovement.cam = this.GetComponent<Camera>();
+        PlayerCore.cam = this.GetComponent<Camera>();
         EffectsManager.postProcessing = this.GetComponent<UnityEngine.Rendering.Volume>();
         EffectsManager.SetupPostProcessing();
 
-        Player.GetComponent<PlayerMovement>().SetupFOV(PlayerMovement.cam.fieldOfView);
+        Player.GetComponent<PlayerCore>().SetupFOV(PlayerCore.cam.fieldOfView);
     }
     
     private void Update()
